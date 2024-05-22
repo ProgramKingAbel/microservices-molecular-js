@@ -21,9 +21,13 @@
 // startApp()
 
 import UserService from './services/user.service.js'
+import EmailService from './services/email.service.js'
 
 async function startApp() {
     await UserService.start();
+    await EmailService.start();
+
+    // Simulate User creation
 
     try {
         const newUser = await UserService.call('user.createUser', {
@@ -34,6 +38,18 @@ async function startApp() {
         console.log('New User Created:', newUser)
         const users = await UserService.call('user.getUsers');
         console.log('All users:', users);
+
+        // Simulate send Email
+
+        const emailResult = await EmailService.call('email.sendEmail', {
+            'recipient': newUser.email,
+            'subject': 'Mock Test Mail From Moleculer',
+            'content': 'Hello, Abel we are happy to have you here'
+        });
+
+        console.log(emailResult);
+
+
 
     } catch (error) {
         console.log('Error', error)
